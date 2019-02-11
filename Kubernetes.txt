@@ -1,0 +1,90 @@
+Introduction
+
+Slide 1:
+
+First some history.
+* In 2004 Google Developed Borg
+* Borg was created to do job scheduling and time sharing on google's compute clusters
+* A paper describing the borg system was not published until 2015, long after kubernetes release
+
+Slide 2:
+December 21 2013: Docker is released and people start to really use containers.
+
+After seeing the excitement around docker Joe Beda, Brendan Burns, Craig McLuckie, Brian Grant and Tim Hockin.
+decide its time to create a OpenSource equivalent to Google borg.  Intially they call the project
+Seven - A Star Trek reference to the "nice" borg character Seven of Nine from the voyager series.
+
+Slide 3:
+Eventually the rename the project Kubernetes which is Greek for "Helmsman" or "Captain".  Sailing references
+are now an epedemic around kubernets projects.
+
+On June 6 2014 Joe Beda releases the initial kubernetes code to Github.
+
+On August 21 2014 I saw Joe Beda present on Kubernetes at LinuxCon.
+I still remember the presentation I also remember thinking: What's the big deal?
+
+Kubernetes is a portable, extensible open-source platform for managing containerized workloads and services,
+that facilitates both declarative configuration and automation.
+
+Slide 4:
+
+Kubernetes Architecture
+* kubeclt the client CLI for interacting with kubernetes
+* Cluster Control Plane (often referred to as the "Master")
+  - API Server - "Reports the cluster state"
+  - Cluster State store (etcd)
+  - Controller-Manager server - Controllers which interact with the api server to change state in the cluster
+  - Scheduler - how the containers are scheduled
+* A "compute" node
+  - Kubelet - "nova-compute"
+  - Container Runtime (CRI) - Typically Docker
+  - Kube-Proxy - A network proxy which reflects Kubernetes networking services on each node.
+
+* Addon Controllers (almost always found)
+  - DNS
+  - Ingress Controller
+  - Heapster
+  - Dashboard (GUI)
+
+Base Kubernetes Objects
+ - Pod
+ - Service
+ - Volume
+ - Namespace
+
+In Kubernetes, a controller is a control loop that watches the shared state of the cluster through the apiserver 
+and makes changes attempting to move the current state towards the desired state.
+
+Kubernetes is a declaritive system - You "declare a state" and the controllers see this request stored in the API
+server and the attempt to converge the cluster to this state.
+
+Controllers
+ - ReplicaSet - A set of identical Pods
+ - Deployment - Rolls out changes to Pods or ReplicaSets
+ - StatefuleSet - Manages the deployment and scaling of a set of Pods , and provides guarantees about the ordering and uniqueness of these Pods
+ - DaemonSet - A pod for every kuernetes compute node
+ - Job - A Pod that runs to completion and exits
+ - CronJob - Creates Jobs at a scheduled Time
+
+How can you run kubernetes?
+* On your desktop: minikube
+* Managed Kubernetes: GKE, Azure, AWS EKS
+* DIY Insanity - On OpenStack!
+
+Kubernetes Ecosystem
+* Helm
+* Operators!
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+
+
