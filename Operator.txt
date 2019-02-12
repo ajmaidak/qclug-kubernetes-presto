@@ -1,0 +1,105 @@
+ajmaidak@operator-sdk:~$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+>   && chmod +x minikube
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 37.3M  100 37.3M    0     0   110M      0 --:--:-- --:--:-- --:--:--  110M
+ajmaidak@operator-sdk:~$ sudo cp minikube /usr/local/bin && rm minikube
+
+ajmaidak@operator-sdk:~$ sudo snap install kubectl --classic
+kubectl 1.13.3 from Canonical✓ installed
+
+
+ajmaidak@operator-sdk:~$ sudo apt-get install \
+>     apt-transport-https \
+>     ca-certificates \
+>     curl \
+>     gnupg-agent \
+>     software-properties-common
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+ca-certificates is already the newest version (20180409).
+...
+Setting up curl (7.58.0-2ubuntu3.6) ...
+
+
+ajmaidak@operator-sdk:~$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+OK
+
+ajmaidak@operator-sdk:~$ sudo apt-key fingerprint 0EBFCD88
+pub   rsa4096 2017-02-22 [SCEA]
+      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+uid           [ unknown] Docker Release (CE deb) <docker@docker.com>
+sub   rsa4096 2017-02-22 [S]
+
+ajmaidak@operator-sdk:~$ sudo add-apt-repository \
+>    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+>    $(lsb_release -cs) \
+>    stable"
+Hit:1 http://us-central1.gce.archive.ubuntu.com/ubuntu bionic InRelease
+Hit:2 http://us-central1.gce.archive.ubuntu.com/ubuntu bionic-updates InRelease
+...
+
+ajmaidak@operator-sdk:~$ sudo apt-get install docker-ce docker-ce-cli containerd.io
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following package was automatically installed and is no longer required:
+  grub-pc-bin
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  aufs-tools cgroupfs-mount libltdl7 pigz
+The following NEW packages will be installed:
+  aufs-tools cgroupfs-mount containerd.io docker-ce docker-ce-cli libltdl7 pigz
+0 upgraded, 7 newly installed, 0 to remove and 25 not upgraded.
+Need to get 50.6 MB of archives.
+After this operation, 243 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+...
+
+ajmaidak@operator-sdk:~$ sudo minikube start --vm-driver=none
+Starting local Kubernetes v1.13.2 cluster...
+Starting VM...
+Getting VM IP address...
+Moving files into cluster...
+Setting up certs...
+Connecting to cluster...
+Setting up kubeconfig...
+Stopping extra container runtimes...
+Starting cluster components...
+Verifying kubelet health ...
+Verifying apiserver health ...
+Kubectl is now configured to use the cluster.
+===================
+WARNING: IT IS RECOMMENDED NOT TO RUN THE NONE DRIVER ON PERSONAL WORKSTATIONS
+	The 'none' driver will run an insecure kubernetes apiserver as root that may leave the host vulnerable to CSRF attacks
+
+When using the none driver, the kubectl config and credentials generated will be root owned and will appear in the root home directory.
+You will need to move the files to the appropriate location and then set the correct permissions.  An example of this is below:
+
+	sudo mv /root/.kube $HOME/.kube # this will write over any previous configuration
+	sudo chown -R $USER $HOME/.kube
+	sudo chgrp -R $USER $HOME/.kube
+
+	sudo mv /root/.minikube $HOME/.minikube # this will write over any previous configuration
+	sudo chown -R $USER $HOME/.minikube
+	sudo chgrp -R $USER $HOME/.minikube
+
+This can also be done automatically by setting the env var CHANGE_MINIKUBE_NONE_USER=true
+Loading cached images from config file.
+
+
+Everything looks great. Please enjoy minikube!
+
+ajmaidak@operator-sdk:~$ sudo chown -R $USER $HOME/.kube
+ajmaidak@operator-sdk:~$ sudo chgrp -R $USER $HOME/.kube
+ajmaidak@operator-sdk:~$
+ajmaidak@operator-sdk:~$ sudo mv /root/.minikube $HOME/.minikube # this will write over any previous configuration
+mv: cannot stat '/root/.minikube': No such file or directory
+ajmaidak@operator-sdk:~$ sudo chown -R $USER $HOME/.minikube
+ajmaidak@operator-sdk:~$ sudo chgrp -R $USER $HOME/.minikube
+ajmaidak@operator-sdk:~$ kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   6m58s<Paste>
+
+
